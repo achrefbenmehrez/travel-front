@@ -10,6 +10,8 @@ export interface LocationInputProps {
   className?: string;
   divHideVerticalLineClass?: string;
   autoFocus?: boolean;
+  onChange?: (value: string) => void;
+
 }
 
 const LocationInput: FC<LocationInputProps> = ({
@@ -18,7 +20,9 @@ const LocationInput: FC<LocationInputProps> = ({
   desc = "Where are you going?",
   className = "nc-flex-1.5",
   divHideVerticalLineClass = "left-10 -right-0.5",
-}) => {
+  onChange, // Destructure onChange prop
+
+                                               }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -59,6 +63,7 @@ const LocationInput: FC<LocationInputProps> = ({
   const handleSelectLocation = (item: string) => {
     setValue(item);
     setShowPopover(false);
+    onChange && onChange(item);
   };
 
   const renderRecentSearches = () => {
@@ -136,7 +141,9 @@ const LocationInput: FC<LocationInputProps> = ({
             value={value}
             autoFocus={showPopover}
             onChange={(e) => {
-              setValue(e.currentTarget.value);
+              const inputValue = e.currentTarget.value; // Get the input value
+              setValue(inputValue); // Update the state with the input value
+              onChange && onChange(inputValue.toUpperCase()); // Pass the input value to the parent component
             }}
             ref={inputRef}
           />

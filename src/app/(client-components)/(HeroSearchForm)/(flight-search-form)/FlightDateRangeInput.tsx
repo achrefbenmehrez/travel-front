@@ -9,12 +9,16 @@ import DatePickerCustomHeaderTwoMonth from "@/components/DatePickerCustomHeaderT
 import DatePickerCustomDay from "@/components/DatePickerCustomDay";
 import ClearDataButton from "../ClearDataButton";
 import ButtonSubmit from "../ButtonSubmit";
+import {fetchFlightData} from "@/services/flightService";
+import { getCurrentDate, getDefaultEndDate,customFormatDate } from "@/services/utils";
+
 
 export interface FlightDateRangeInputProps {
   className?: string;
   fieldClassName?: string;
   hasButtonSubmit?: boolean;
   selectsRange?: boolean;
+  filterInformation? : any
 }
 
 const FlightDateRangeInput: FC<FlightDateRangeInputProps> = ({
@@ -22,17 +26,47 @@ const FlightDateRangeInput: FC<FlightDateRangeInputProps> = ({
   fieldClassName = "[ nc-hero-field-padding ]",
   hasButtonSubmit = true,
   selectsRange = true,
+                                                               filterInformation,
 }) => {
-  const [startDate, setStartDate] = useState<Date | null>(
-    new Date("2023/05/01")
-  );
-  const [endDate, setEndDate] = useState<Date | null>(new Date("2023/05/16"));
+  const initialStartDate = new Date(getCurrentDate());
+  const initialEndDate = new Date(getDefaultEndDate(getCurrentDate()));
+
+  const [startDate  , setStartDate] = useState<Date | null>(initialStartDate);
+  const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
+  const { origin, destination } = filterInformation;
+  console.log("origin", origin);
+  console.log("destination", destination);
+
 
   const onChangeRangeDate = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
+
   };
+
+  const handleFlightSearchClick = async (e:any) => {
+    e.preventDefault();
+    if (!startDate || !endDate) {
+      alert("Please select both start and end dates.");
+      return;
+    }
+
+    // Define start and end dates
+    const startDateFormatted = customFormatDate(startDate);
+    const endDateFormatted = customFormatDate(endDate);
+
+    try {
+      const result = await fetchFlightData(startDateFormatted, endDateFormatted, origin, destination);
+      // Dispatch a custom browser event with the fetched data
+      const event = new CustomEvent('flightDataFetched', { detail: result });
+      window.dispatchEvent(event);
+    } catch (error) {
+      console.error("Error fetching flight data:", error);
+    }
+  };
+
+
 
   const renderInput = () => {
     return (
@@ -64,7 +98,7 @@ const FlightDateRangeInput: FC<FlightDateRangeInputProps> = ({
 
   return (
     <>
-      <Popover className={`FlightDateRangeInput relative flex ${className}`}>
+      <Popover className={`FlightDateRangeInput relative flex ${className}`} >
         {({ open }) => (
           <>
             <div
@@ -86,8 +120,9 @@ const FlightDateRangeInput: FC<FlightDateRangeInputProps> = ({
 
               {/* BUTTON SUBMIT OF FORM */}
               {hasButtonSubmit && (
-                <div className="pr-2 xl:pr-4">
-                  <ButtonSubmit href="/listing-car-detail" />
+                <div className="pr-2 xl:pr-4" onClick={handleFlightSearchClick}>
+                  <ButtonSubmit
+                                href="#" />
                 </div>
               )}
             </div>

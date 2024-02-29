@@ -37,6 +37,21 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({}) => {
   const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(1);
   const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(1);
 
+
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
+
+  // Callback functions to update origin and destination
+  const handleOriginChange = (value:any) => {
+    setOrigin(value);
+    console.log("origin", value);
+  };
+
+  const handleDestinationChange = (value:any) => {
+    setDestination(value);
+    console.log("destination", value);
+  };
+
   const handleChangeData = (value: number, type: keyof GuestsObject) => {
     let newValue = {
       guestAdults: guestAdultsInputValue,
@@ -222,6 +237,8 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({}) => {
             placeHolder="Flying from"
             desc="Where do you want to fly from?"
             className="flex-1"
+            onChange={handleOriginChange}
+
           />
           <div className="self-center border-r border-slate-200 dark:border-slate-700 h-8"></div>
           <LocationInput
@@ -229,11 +246,16 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({}) => {
             desc="Where you want to fly to?"
             className="flex-1"
             divHideVerticalLineClass=" -inset-x-0.5"
+            onChange={handleDestinationChange}
+
+
           />
           <div className="self-center border-r border-slate-200 dark:border-slate-700 h-8"></div>
           <FlightDateRangeInput
             selectsRange={dropOffLocationType !== "oneWay"}
             className="flex-1"
+            filterInformation={{ origin, destination }}
+
           />
         </div>
       </form>
