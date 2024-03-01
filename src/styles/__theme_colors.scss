@@ -2,29 +2,29 @@
 
 // THEME PALETTE 10 indigo-coolGrey ==========================================
 :root {
-  // PRIMARY COLOR
-  --c-primary-50: 238, 242, 255;
-  --c-primary-100: 224, 231, 255;
-  --c-primary-200: 199, 210, 254;
-  --c-primary-300: 165, 180, 252;
-  --c-primary-400: 129, 140, 248;
-  --c-primary-500: 99, 102, 241;
-  --c-primary-600: 79, 70, 229;
-  --c-primary-700: 67, 56, 202;
-  --c-primary-800: 55, 48, 163;
-  --c-primary-900: 49, 46, 129;
+  // PRIMARY COLOR (New Green Shades)
+  --c-primary-50: 229, 249, 229;
+  --c-primary-100: 204, 239, 204;
+  --c-primary-200: 179, 229, 179;
+  --c-primary-300: 154, 214, 154;
+  --c-primary-400: 129, 199, 129;
+  --c-primary-500: 104, 184, 104;
+  --c-primary-600: 79, 169, 79;
+  --c-primary-700: 54, 154, 54;
+  --c-primary-800: 44, 139, 44;
+  --c-primary-900: 34, 139, 34; // Base color for primary
 
-  // SECONDARY COLOR
-  --c-secondary-50: 240, 253, 250;
-  --c-secondary-100: 204, 251, 241;
-  --c-secondary-200: 153, 246, 228;
-  --c-secondary-300: 153, 246, 228;
-  --c-secondary-400: 45, 212, 191;
-  --c-secondary-500: 20, 184, 166;
-  --c-secondary-600: 13, 148, 136;
-  --c-secondary-700: 15, 118, 110;
-  --c-secondary-800: 17, 94, 89;
-  --c-secondary-900: 19, 78, 74;
+  // SECONDARY COLOR (New Teal Shades)
+  --c-secondary-50: 204, 239, 239;
+  --c-secondary-100: 179, 229, 229;
+  --c-secondary-200: 154, 214, 214;
+  --c-secondary-300: 129, 199, 199;
+  --c-secondary-400: 104, 184, 184;
+  --c-secondary-500: 79, 169, 169;
+  --c-secondary-600: 54, 154, 154;
+  --c-secondary-700: 29, 146, 146;
+  --c-secondary-800: 14, 139, 139;
+  --c-secondary-900: 0, 139, 139; // Base color for secondary
 
   // NEUTRAL COLOR
   --c-neutral-50: 249, 250, 251;

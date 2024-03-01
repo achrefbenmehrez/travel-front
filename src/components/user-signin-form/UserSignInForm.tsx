@@ -7,6 +7,7 @@ import ButtonPrimary from "@/shared/ButtonPrimary";
 import axiosInstance from "@/utils/axiosInstance";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const UserSignInForm = () => {
   const router = useRouter();
@@ -24,24 +25,49 @@ const UserSignInForm = () => {
         .required("Password is required"),
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
-      try {
-        const response: any = await signIn("credentials", {
-          email: values.email,
-          password: values.password,
-          redirect: false,
-        });
-        console.log(response);
+      // Wrap the signIn logic in a new Promise so we can use it with toast.promise
+      const signInPromise = new Promise(async (resolve, reject) => {
+        try {
+          const response = await signIn("credentials", {
+            email: values.email,
+            password: values.password,
+            redirect: false,
+          });
 
-        if (response?.ok) {
-          resetForm();
-          router.push("/");
+          if (response?.ok) {
+            resetForm();
+            resolve(response);
+          } else {
+            reject(new Error("Invalid Credentials."));
+          }
+        } catch (error) {
+          console.error("Failed to sign in:", error.message);
+          reject(error);
+        } finally {
+          setSubmitting(false);
         }
-      } catch (error: any) {
-        console.log(error);
-        console.error("Failed to sign up:", error.message);
-      } finally {
-        setSubmitting(false);
-      }
+      });
+
+      // Use toast.promise with the signInPromise
+      toast
+        .promise(signInPromise, {
+          loading: "Signing in...",
+          success: "Welcome Back!",
+          error: (err) => {
+            // If you want to use the error message from the promise rejection
+            return <b>{err.message}</b>;
+            // Or simply return a static message
+            // return <b>Invalid Credentials.</b>;
+          },
+        })
+        .then(() => {
+          // Perform actions after the promise resolves successfully, e.g., navigating
+          router.push("/");
+        })
+        .catch((error) => {
+          // Handle any additional actions if the promise rejects, if necessary
+          console.error("Authentication failed:", error);
+        });
     },
   });
 

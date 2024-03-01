@@ -6,6 +6,7 @@ import Input from "@/shared/Input";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import axiosInstance from "@/utils/axiosInstance";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const UserSignUpForm = () => {
   const router = useRouter();
@@ -13,7 +14,6 @@ const UserSignUpForm = () => {
     initialValues: {
       firstName: "",
       lastName: "",
-      userName: "",
       email: "",
       password: "",
       passwordConfirmation: "",
@@ -22,7 +22,6 @@ const UserSignUpForm = () => {
     validationSchema: Yup.object({
       firstName: Yup.string().required("First name is required"),
       lastName: Yup.string().required("Last name is required"),
-      userName: Yup.string().required("Username is required"),
       email: Yup.string()
         .email("Invalid email address")
         .required("Email is required"),
@@ -36,22 +35,28 @@ const UserSignUpForm = () => {
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
-        const response = await fetch(process.env.NEXT_PUBLIC_AUTH_API_URL+"/api/v1/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        });
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_AUTH_API_URL + "/api/v1/signup",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(values),
+          }
+        );
 
         if (response.ok) {
+          toast.success("Sign up successful! Please log in.");
           resetForm();
           router.push("/login");
         } else {
           const errorData = await response.json();
+          toast.error("Signup failed , verify your data.");
           console.error("Failed to sign up:", errorData.message);
         }
       } catch (error: any) {
+        toast.error("Signup failed , verify your data.");
         console.error("Failed to sign up:", error.message);
       } finally {
         setSubmitting(false);
@@ -86,20 +91,6 @@ const UserSignUpForm = () => {
         />
         {formik.touched.lastName && formik.errors.lastName ? (
           <div className="text-red-500">{formik.errors.lastName}</div>
-        ) : null}
-      </label>
-
-      <label className="block">
-        <span>Username</span>
-        <Input
-          type="text"
-          name="userName"
-          value={formik.values.userName}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-        />
-        {formik.touched.userName && formik.errors.userName ? (
-          <div className="text-red-500">{formik.errors.userName}</div>
         ) : null}
       </label>
 
