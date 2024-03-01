@@ -39,13 +39,13 @@ const handler = NextAuth({
             body: JSON.stringify(credentials),
           }
         );
-        console.log(response.ok);
 
         if (!response.ok) {
           return null;
         }
 
         const data = await response.json();
+        console.log(data);
         if (data.user.user.accessToken) {
           data.user.token = data.user.user.accessToken;
         }
