@@ -39,7 +39,7 @@ const handler = NextAuth({
             body: JSON.stringify(credentials),
           }
         );
-        console.log(response);
+        console.log(response.ok);
 
         if (!response.ok) {
           return null;
