@@ -50,7 +50,7 @@ const handler = NextAuth({
           data.user.token = data.user.user.accessToken;
         }
 
-        return data.user.user.account;
+        return data.user.user;
       },
     }),
   ],
