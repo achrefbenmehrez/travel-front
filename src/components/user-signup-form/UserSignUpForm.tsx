@@ -30,13 +30,13 @@ const UserSignUpForm = () => {
         .min(6, "Password must be at least 6 characters")
         .required("Password is required"),
       passwordConfirmation: Yup.string()
-        .oneOf([Yup.ref("password"), null], "Passwords must match")
+        .oneOf([Yup.ref("password"), "null"], "Passwords must match")
         .required("Please confirm your password"),
       phoneNumber: Yup.string().required("Phone number is required"),
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
-        const response = await fetch("http://localhost:5050/api/v1/signup", {
+        const response = await fetch(process.env.NEXT_PUBLIC_AUTH_API_URL+"/api/v1/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

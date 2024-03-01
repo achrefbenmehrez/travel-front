@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+
 declare module "next-auth" {
   interface User {
     /* id: string;
@@ -29,7 +30,7 @@ const handler = NextAuth({
         password: {},
       },
       async authorize(credentials, req) {
-        const response = await fetch("http://localhost:5050/api/v1/signin", {
+        const response = await fetch(process.env.NEXT_PUBLIC_AUTH_API_URL+"/api/v1/signin", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
