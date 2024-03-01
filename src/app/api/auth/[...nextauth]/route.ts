@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-
 declare module "next-auth" {
   interface User {
     /* id: string;
@@ -30,13 +29,17 @@ const handler = NextAuth({
         password: {},
       },
       async authorize(credentials, req) {
-        const response = await fetch(process.env.NEXT_PUBLIC_AUTH_API_URL+"/api/v1/signin", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(credentials),
-        });
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_AUTH_API_URL + "/api/v1/signin",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(credentials),
+          }
+        );
+        console.log(response);
 
         if (!response.ok) {
           return null;
