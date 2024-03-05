@@ -1,14 +1,14 @@
-import React, { FC } from "react";
+import React from "react";
 import Label from "@/components/Label";
 import Avatar from "@/shared/Avatar";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import Input from "@/shared/Input";
-import Select from "@/shared/Select";
-import Textarea from "@/shared/Textarea";
+import { getServerSession } from "next-auth";
 
 export interface AccountPageProps {}
 
-const AccountPage = () => {
+const AccountPage = async () => {
+  const session = await getServerSession();
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* HEADING */}
@@ -45,47 +45,27 @@ const AccountPage = () => {
         </div>
         <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
           <div>
-            <Label>Name</Label>
-            <Input className="mt-1.5" defaultValue="Eden Tuan" />
-          </div>
-          {/* ---- */}
-          <div>
-            <Label>Gender</Label>
-            <Select className="mt-1.5">
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
-            </Select>
-          </div>
-          {/* ---- */}
-          <div>
             <Label>Username</Label>
-            <Input className="mt-1.5" defaultValue="@eden_tuan" />
+            <Input className="mt-1.5" defaultValue={session?.user.userName} />
           </div>
-          {/* ---- */}
+          <div>
+            <Label>First name</Label>
+            <Input className="mt-1.5" defaultValue={session?.user.firstName} />
+          </div>
+          <div>
+            <Label>Last name</Label>
+            <Input className="mt-1.5" defaultValue={session?.user.lastName} />
+          </div>
           <div>
             <Label>Email</Label>
-            <Input className="mt-1.5" defaultValue="example@email.com" />
+            <Input className="mt-1.5" defaultValue={session?.user.email} />
           </div>
-          {/* ---- */}
-          <div className="max-w-lg">
-            <Label>Date of birth</Label>
-            <Input className="mt-1.5" type="date" defaultValue="1990-07-22" />
-          </div>
-          {/* ---- */}
-          <div>
-            <Label>Addess</Label>
-            <Input className="mt-1.5" defaultValue="New york, USA" />
-          </div>
-          {/* ---- */}
           <div>
             <Label>Phone number</Label>
-            <Input className="mt-1.5" defaultValue="003 888 232" />
-          </div>
-          {/* ---- */}
-          <div>
-            <Label>About you</Label>
-            <Textarea className="mt-1.5" defaultValue="..." />
+            <Input
+              className="mt-1.5"
+              defaultValue={session?.user.phoneNumber}
+            />
           </div>
           <div className="pt-2">
             <ButtonPrimary>Update info</ButtonPrimary>

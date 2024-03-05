@@ -4,12 +4,15 @@ import Avatar from "@/shared/Avatar";
 import SwitchDarkMode2 from "@/shared/SwitchDarkMode2";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
+import { getToken } from "next-auth/jwt";
 interface Props {
   className?: string;
 }
 
 export default function AvatarDropdown({ className = "" }: Props) {
   const { data: session } = useSession();
+  const token = getToken();
+  console.log(token)
   return (
     <>
       <Popover className={`AvatarDropdown relative flex ${className}`}>
@@ -36,14 +39,15 @@ export default function AvatarDropdown({ className = "" }: Props) {
                       <>
                         {/* Display user data */}
                         <div className="flex items-center space-x-3">
-                          <Avatar sizeClass="w-12 h-12" />
+                          <Avatar
+                            sizeClass="w-12 h-12"
+                            imgUrl={session.user.userImage}
+                            userName={session.user.userName}
+                          />
                           <div className="flex-grow">
                             <h4 className="font-semibold">
                               {session.user.userName}
                             </h4>
-                            <p className="text-xs mt-0.5">
-                              {session.user.location}
-                            </p>
                           </div>
                         </div>
                         <div className="w-full border-b border-neutral-200 dark:border-neutral-700" />
@@ -100,7 +104,7 @@ export default function AvatarDropdown({ className = "" }: Props) {
                             <p className="text-sm font-medium ">{"Login"}</p>
                           </div>
                         </Link>
-                       {/*  <Link
+                        {/*  <Link
                           href={"/signup"}
                           className="flex items-center p-2 -m-3 transition duration-150 ease-in-out rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                           onClick={() => close()}

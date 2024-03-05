@@ -18,9 +18,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Chisfis - Booking online React Next Template",
-  description: "Booking online & rental online React Next Template",
-  keywords: "Chisfis, Booking online, React Next Template",
+  title: "Travel - Online Travel Booking",
+  description: "Travel ",
+  keywords: "Travel, Booking online, React Next Template",
   viewport:
     "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
 };
@@ -34,7 +34,6 @@ export default async function RootLayout({
 }) {
   const session = await getServerSession();
   return (
-
     <html lang="en" className={poppins.className}>
       <body className="bg-white text-base dark:bg-neutral-900 text-neutral-900 dark:text-neutral-200">
         <Providers session={session}>
@@ -46,6 +45,5 @@ export default async function RootLayout({
         </Providers>
       </body>
     </html>
-
   );
 }
