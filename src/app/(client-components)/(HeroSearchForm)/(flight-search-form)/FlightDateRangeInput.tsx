@@ -34,9 +34,6 @@ const FlightDateRangeInput: FC<FlightDateRangeInputProps> = ({
   const [startDate  , setStartDate] = useState<Date | null>(initialStartDate);
   const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
   const { origin, destination } = filterInformation;
-  console.log("origin", origin);
-  console.log("destination", destination);
-
 
   const onChangeRangeDate = (dates: [Date | null, Date | null]) => {
     const [start, end] = dates;
@@ -54,8 +51,11 @@ const FlightDateRangeInput: FC<FlightDateRangeInputProps> = ({
 
     // Define start and end dates
     const startDateFormatted = customFormatDate(startDate);
+    console.log("startDateFormattedaaaaaa", startDateFormatted)
     const endDateFormatted = customFormatDate(endDate);
-
+    console.log("endDateFormattedaaaaa", endDateFormatted)
+    console.log("originaaaaa", origin);
+    console.log("destinationaaaa", destination);
     try {
       const result = await fetchFlightData(startDateFormatted, endDateFormatted, origin, destination);
       // Dispatch a custom browser event with the fetched data

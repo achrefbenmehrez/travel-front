@@ -5,8 +5,6 @@ import Heading2 from "@/shared/Heading2";
 import FlightCard, { FlightCardProps } from "@/components/FlightCard";
 import Pagination from "@/components/customComponent/paginationComponent";
 import CustomSpinner from "@/components/customComponent/spinnerComponent"; // Import your custom spinner
-import { fetchFlightData } from "@/services/flightService";
-import { getCurrentDate, getDefaultEndDate} from "@/services/utils";
 import * as process from "process";
 require('dotenv').config()
 

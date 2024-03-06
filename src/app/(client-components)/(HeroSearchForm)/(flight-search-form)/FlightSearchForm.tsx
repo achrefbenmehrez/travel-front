@@ -8,6 +8,7 @@ import { Fragment } from "react";
 import NcInputNumber from "@/components/NcInputNumber";
 import FlightDateRangeInput from "./FlightDateRangeInput";
 import { GuestsObject } from "../../type";
+import FlightLocationInput from "@/app/(client-components)/(HeroSearchFormSmall)/FlightLocationInput";
 
 export interface FlightSearchFormProps {}
 
@@ -233,7 +234,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({}) => {
       <form className="w-full relative mt-8 rounded-[40px] xl:rounded-[49px] rounded-t-2xl xl:rounded-t-3xl shadow-xl dark:shadow-2xl bg-white dark:bg-neutral-800">
         {renderRadioBtn()}
         <div className="flex flex-1 rounded-full">
-          <LocationInput
+          <FlightLocationInput
             placeHolder="Flying from"
             desc="Where do you want to fly from?"
             className="flex-1"
@@ -241,7 +242,7 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({}) => {
 
           />
           <div className="self-center border-r border-slate-200 dark:border-slate-700 h-8"></div>
-          <LocationInput
+          <FlightLocationInput
             placeHolder="Flying to"
             desc="Where you want to fly to?"
             className="flex-1"
