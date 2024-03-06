@@ -1,17 +1,16 @@
+"use client";
 import { Popover, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import Avatar from "@/shared/Avatar";
 import SwitchDarkMode2 from "@/shared/SwitchDarkMode2";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
-import { getToken } from "next-auth/jwt";
+import { getSession, signOut, useSession } from "next-auth/react";
 interface Props {
   className?: string;
 }
 
 export default function AvatarDropdown({ className = "" }: Props) {
   const { data: session } = useSession();
-  console.log("session", session);
   return (
     <>
       <Popover className={`AvatarDropdown relative flex ${className}`}>

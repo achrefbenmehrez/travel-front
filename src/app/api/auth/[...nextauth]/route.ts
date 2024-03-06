@@ -1,7 +1,12 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions, Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { ExtendedUser } from "types/next-auth";
 
 export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+  },
   pages: {
     signIn: "/login",
   },
@@ -28,18 +33,15 @@ export const authOptions: NextAuthOptions = {
 
         const data = await response.json();
 
-        if (data.user.accessToken) {
-          return data.user;
+        if (data.accessToken) {
+          data.user.accessToken = data.accessToken;
         }
-        return null;
+        return data.user;
       },
     }),
   ],
-  session: {
-    strategy: "jwt",
-  },
   callbacks: {
-    async jwt({ token, user }: { token: any; user: any }) {
+    async jwt({ token, user }: { token: JWT; user: ExtendedUser }) {
       if (user) {
         token.email = user.email;
         token.userName = user.userName;
@@ -50,16 +52,16 @@ export const authOptions: NextAuthOptions = {
         token.phoneNumber = user.phoneNumber;
         token.password = user.password;
         token.isActive = user.isActive;
-        token.id = user.id;
+        token._id = user._id;
         token.accessToken = user.accessToken;
       }
       return token;
     },
-    async session({ session, token }: { session: any; token: any }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (token) {
         session.user.email = token.email;
         session.user.userName = token.userName;
-        session.user.id = token.id;
+        session.user._id = token._id;
         session.user.accessToken = token.accessToken;
         session.user.firstName = token.firstName;
         session.user.lastName = token.lastName;

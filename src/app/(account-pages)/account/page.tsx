@@ -1,15 +1,15 @@
+"use client";
 import React from "react";
 import Label from "@/components/Label";
 import Avatar from "@/shared/Avatar";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import Input from "@/shared/Input";
-import { getServerSession } from "next-auth";
+import { useSession } from "next-auth/react";
 
 export interface AccountPageProps {}
 
-const AccountPage = async () => {
-  const session = await getServerSession();
-  console.log("test session", session);
+const AccountPage = () => {
+  const { data: session } = useSession();
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* HEADING */}
@@ -47,25 +47,25 @@ const AccountPage = async () => {
         <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
           <div>
             <Label>Username</Label>
-            <Input className="mt-1.5" defaultValue={session?.user.userName} />
+            <Input className="mt-1.5" defaultValue={session?.user?.userName} />
           </div>
           <div>
             <Label>First name</Label>
-            <Input className="mt-1.5" defaultValue={session?.user.firstName} />
+            <Input className="mt-1.5" defaultValue={session?.user?.firstName} />
           </div>
           <div>
             <Label>Last name</Label>
-            <Input className="mt-1.5" defaultValue={session?.user.lastName} />
+            <Input className="mt-1.5" defaultValue={session?.user?.lastName} />
           </div>
           <div>
             <Label>Email</Label>
-            <Input className="mt-1.5" defaultValue={session?.user.email} />
+            <Input className="mt-1.5" defaultValue={session?.user?.email} />
           </div>
           <div>
             <Label>Phone number</Label>
             <Input
               className="mt-1.5"
-              defaultValue={session?.user.phoneNumber}
+              defaultValue={session?.user?.phoneNumber}
             />
           </div>
           <div className="pt-2">

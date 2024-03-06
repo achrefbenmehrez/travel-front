@@ -34,8 +34,6 @@ const FlightDateRangeInput: FC<FlightDateRangeInputProps> = ({
   const [startDate  , setStartDate] = useState<Date | null>(initialStartDate);
   const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
   const { origin, destination } = filterInformation;
-  console.log("origin", origin);
-  console.log("destination", destination);
 
 
   const onChangeRangeDate = (dates: [Date | null, Date | null]) => {

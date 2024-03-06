@@ -13,7 +13,7 @@ export default function Providers({
 }) {
   return (
     <>
-      <SessionProvider session={session}>
+      <SessionProvider>
         <NextUIProvider>
           <Toaster />
           {children}

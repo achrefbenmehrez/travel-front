@@ -44,12 +44,10 @@ const FlightSearchForm: FC<FlightSearchFormProps> = ({}) => {
   // Callback functions to update origin and destination
   const handleOriginChange = (value:any) => {
     setOrigin(value);
-    console.log("origin", value);
   };
 
   const handleDestinationChange = (value:any) => {
     setDestination(value);
-    console.log("destination", value);
   };
 
   const handleChangeData = (value: number, type: keyof GuestsObject) => {
