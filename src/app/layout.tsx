@@ -20,7 +20,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Travel - Online Travel Booking",
   description: "Travel ",
-  keywords: "Travel, Booking online, React Next Template",
+  keywords: "Travel, Booking online",
   viewport:
     "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
 };
