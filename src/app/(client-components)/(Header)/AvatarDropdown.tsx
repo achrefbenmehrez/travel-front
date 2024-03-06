@@ -11,8 +11,7 @@ interface Props {
 
 export default function AvatarDropdown({ className = "" }: Props) {
   const { data: session } = useSession();
-  const token = getToken();
-  console.log(token)
+  console.log("session", session);
   return (
     <>
       <Popover className={`AvatarDropdown relative flex ${className}`}>

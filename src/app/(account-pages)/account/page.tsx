@@ -9,6 +9,7 @@ export interface AccountPageProps {}
 
 const AccountPage = async () => {
   const session = await getServerSession();
+  console.log("test session", session);
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* HEADING */}

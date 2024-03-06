@@ -1,6 +1,7 @@
 import { avatarColors } from "@/contains/contants";
 import React, { FC } from "react";
 import Image from "next/image";
+import defaultAvatar from "../../src/images/avatars/default_avatar.png";
 
 export interface AvatarProps {
   containerClassName?: string;
@@ -16,7 +17,7 @@ const Avatar: FC<AvatarProps> = ({
   containerClassName = "ring-1 ring-white dark:ring-neutral-900",
   sizeClass = "h-6 w-6 text-sm",
   radius = "rounded-full",
-  imgUrl = "https://www.shutterstock.com/image-vector/user-profile-icon-vector-avatar-600nw-2247726673.jpg",
+  imgUrl =defaultAvatar,
   userName,
   hasChecked,
   hasCheckedClass = "w-4 h-4 -top-0.5 -right-0.5",
