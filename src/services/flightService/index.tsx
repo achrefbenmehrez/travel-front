@@ -1,22 +1,32 @@
 require('dotenv').config()
-const duffleApiUrl : any = process.env.NEXT_PUBLIC_DUFFLE_API_URL;
+const duffleApiUrl: any = process.env.NEXT_PUBLIC_DUFFLE_API_URL;
 
-export const fetchFlightData = async (startDate:any,endDate:any,defaultAirport:any,defaultDestinationAiport:any) => {
+export const fetchFlightData = async (startDate: any, endDate: any, defaultAirport: any, defaultDestinationAiport: any, flightClassFilter: any,
+                                      dropOffLocationTypeFilter: any) => {
+    // print all data in params
+    console.log('startDate', startDate);
+    console.log('endDate', endDate);
+    console.log('defaultAirport', defaultAirport);
+    console.log('defaultDestinationAiport', defaultDestinationAiport);
+    console.log('flightClassFilter', flightClassFilter);
+    console.log('dropOffLocationTypeFilter', dropOffLocationTypeFilter);
+
+
     try {
-        console.log('duffleApiUrl',duffleApiUrl);
+        console.log('duffleApiUrl', duffleApiUrl);
         const response = await fetch(`${duffleApiUrl}/duffle/search`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                    startDate: startDate,
-                    endDate: endDate,
+                startDate: startDate,
+                endDate: endDate,
                 departureOrigin: defaultAirport,
                 departureDestination: defaultDestinationAiport,
                 returnOrigin: defaultDestinationAiport,
                 returnDestination: defaultAirport,
-                cabinClass: "economy",
+                cabinClass: flightClassFilter,
                 passengerType: "adult",
             }),
         });
@@ -32,7 +42,6 @@ export const fetchFlightData = async (startDate:any,endDate:any,defaultAirport:a
         return null; // Handle error appropriately in your component
     }
 };
-
 
 
 export const fetchCitiesFromApi = async (inputValue: any) => {

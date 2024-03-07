@@ -57,7 +57,7 @@ const HeroSearchForm: FC<HeroSearchFormProps> = ({
       case "Cars":
         return <RentalCarSearchForm />;
       case "Flights":
-        return <FlightSearchForm />;
+        return <FlightSearchForm  />;
 
       default:
         return null;

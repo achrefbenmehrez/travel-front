@@ -1,12 +1,12 @@
-"use client"
+"use client";
 import React, { FC, useEffect, useState } from "react";
 import TabFilters from "./TabFilters";
 import Heading2 from "@/shared/Heading2";
 import FlightCard, { FlightCardProps } from "@/components/FlightCard";
 import Pagination from "@/components/customComponent/paginationComponent";
-import CustomSpinner from "@/components/customComponent/spinnerComponent"; // Import your custom spinner
+import CustomSpinner from "@/components/customComponent/spinnerComponent";
 import * as process from "process";
-require('dotenv').config()
+require('dotenv').config();
 
 export interface SectionGridFilterCardProps {
     className?: string;
@@ -15,9 +15,11 @@ export interface SectionGridFilterCardProps {
 const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" }) => {
     const [flightData, setFlightData] = useState<FlightCardProps["data"][]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [isLoading, setIsLoading] = useState<boolean>(true); // Loading state
-    // load from env
-    const flightsPerPage = parseInt(process.env.NEXT_PUBLIC_FLIGHT_NUMBER_PER_PAGE || "5"); // Default to 5 if environment variable is not set
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    // Load from env
+    const flightsPerPage = parseInt(process.env.NEXT_PUBLIC_FLIGHT_NUMBER_PER_PAGE || "5");
+
     useEffect(() => {
         const handleFlightDataFetched = (event: any) => {
             setFlightData(event.detail);
@@ -29,7 +31,6 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
         return () => window.removeEventListener('flightDataFetched', handleFlightDataFetched);
     }, []);
 
-    //
     const indexOfLastFlight = currentPage * flightsPerPage;
     const indexOfFirstFlight = indexOfLastFlight - flightsPerPage;
     const currentFlights = flightData.slice(indexOfFirstFlight, indexOfLastFlight);
@@ -40,8 +41,8 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
                 heading="Singapore - Tokyo"
                 subHeading={
                     <span className="block text-neutral-500 dark:text-neutral-400 mt-3">
-                        22 flights<span className="mx-2">·</span>round trip<span className="mx-2">·</span>2 Guests
-                    </span>
+            22 flights<span className="mx-2">·</span>round trip<span className="mx-2">·</span>2 Guests
+          </span>
                 }
             />
             <div className="mb-8 lg:mb-11">

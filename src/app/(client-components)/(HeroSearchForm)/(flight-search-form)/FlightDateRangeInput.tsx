@@ -1,187 +1,172 @@
 "use client";
 
-import React, { Fragment, useState } from "react";
-import { FC } from "react";
+import React, {Fragment, useState} from "react";
+import {FC} from "react";
 import DatePicker from "react-datepicker";
-import { Popover, Transition } from "@headlessui/react";
-import { CalendarIcon } from "@heroicons/react/24/outline";
+import {Popover, Transition} from "@headlessui/react";
+import {CalendarIcon} from "@heroicons/react/24/outline";
 import DatePickerCustomHeaderTwoMonth from "@/components/DatePickerCustomHeaderTwoMonth";
 import DatePickerCustomDay from "@/components/DatePickerCustomDay";
 import ClearDataButton from "../ClearDataButton";
 import ButtonSubmit from "../ButtonSubmit";
 import {fetchFlightData} from "@/services/flightService";
-import { getCurrentDate, getDefaultEndDate,customFormatDate } from "@/services/utils";
+import {getCurrentDate, getDefaultEndDate, customFormatDate} from "@/services/utils";
 
 
 export interface FlightDateRangeInputProps {
-  className?: string;
-  fieldClassName?: string;
-  hasButtonSubmit?: boolean;
-  selectsRange?: boolean;
-  filterInformation? : any
+    className?: string;
+    fieldClassName?: string;
+    hasButtonSubmit?: boolean;
+    selectsRange?: boolean;
+    filterInformation?: any;
+    onSearch?: (startDate: Date | null, endDate: Date | null) => void;
 }
 
 const FlightDateRangeInput: FC<FlightDateRangeInputProps> = ({
-  className = "",
-  fieldClassName = "[ nc-hero-field-padding ]",
-  hasButtonSubmit = true,
-  selectsRange = true,
-                                                               filterInformation,
-}) => {
-  const initialStartDate = new Date(getCurrentDate());
-  const initialEndDate = new Date(getDefaultEndDate(getCurrentDate()));
+                                                                 className = "",
+                                                                 fieldClassName = "[ nc-hero-field-padding ]",
+                                                                 hasButtonSubmit = true,
+                                                                 selectsRange = true,
+                                                                 filterInformation,
+                                                                 onSearch,
+                                                             }) => {
+    const initialStartDate = new Date(getCurrentDate());
+    const initialEndDate = new Date(getDefaultEndDate(getCurrentDate()));
 
-  const [startDate  , setStartDate] = useState<Date | null>(initialStartDate);
-  const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
-  const { origin, destination } = filterInformation;
+    const [startDate, setStartDate] = useState<Date | null>(initialStartDate);
+    const [endDate, setEndDate] = useState<Date | null>(initialEndDate);
+    const {origin, destination} = filterInformation;
 
-  const onChangeRangeDate = (dates: [Date | null, Date | null]) => {
-    const [start, end] = dates;
-    setStartDate(start);
-    setEndDate(end);
+    const onChangeRangeDate = (dates: [Date | null, Date | null]) => {
+        const [start, end] = dates;
+        setStartDate(start);
+        setEndDate(end);
+    };
 
-  };
-
-  const handleFlightSearchClick = async (e:any) => {
-    e.preventDefault();
-    if (!startDate || !endDate) {
-      alert("Please select both start and end dates.");
-      return;
-    }
-
-    // Define start and end dates
-    const startDateFormatted = customFormatDate(startDate);
-    console.log("startDateFormattedaaaaaa", startDateFormatted)
-    const endDateFormatted = customFormatDate(endDate);
-    console.log("endDateFormattedaaaaa", endDateFormatted)
-    console.log("originaaaaa", origin);
-    console.log("destinationaaaa", destination);
-    try {
-      const result = await fetchFlightData(startDateFormatted, endDateFormatted, origin, destination);
-      // Dispatch a custom browser event with the fetched data
-      const event = new CustomEvent('flightDataFetched', { detail: result });
-      window.dispatchEvent(event);
-    } catch (error) {
-      console.error("Error fetching flight data:", error);
-    }
-  };
+    const handleFlightSearchClick = (e: any) => {
+        e.preventDefault();
+        if (onSearch && startDate && endDate) {
+            onSearch(startDate, endDate);
+        }
+    };
 
 
-
-  const renderInput = () => {
-    return (
-      <>
-        <div className="text-neutral-300 dark:text-neutral-400">
-          <CalendarIcon className="w-5 h-5 lg:w-7 lg:h-7" />
-        </div>
-        <div className="flex-grow text-left">
+    const renderInput = () => {
+        return (
+            <>
+                <div className="text-neutral-300 dark:text-neutral-400">
+                    <CalendarIcon className="w-5 h-5 lg:w-7 lg:h-7"/>
+                </div>
+                <div className="flex-grow text-left">
           <span className="block xl:text-lg font-semibold">
             {startDate?.toLocaleDateString("en-US", {
-              month: "short",
-              day: "2-digit",
+                month: "short",
+                day: "2-digit",
             }) || "Add dates"}
-            {selectsRange && endDate
-              ? " - " +
-                endDate?.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "2-digit",
-                })
-              : ""}
+              {selectsRange && endDate
+                  ? " - " +
+                  endDate?.toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "2-digit",
+                  })
+                  : ""}
           </span>
-          <span className="block mt-1 text-sm text-neutral-400 leading-none font-light">
+                    <span className="block mt-1 text-sm text-neutral-400 leading-none font-light">
             {selectsRange ? "Pick up - Drop off" : "Pick up date"}
           </span>
-        </div>
-      </>
-    );
-  };
+                </div>
+            </>
+        );
+    };
 
-  return (
-    <>
-      <Popover className={`FlightDateRangeInput relative flex ${className}`} >
-        {({ open }) => (
-          <>
-            <div
-              className={`flex-1 z-10 flex items-center focus:outline-none ${
-                open ? "nc-hero-field-focused" : ""
-              }`}
-            >
-              <Popover.Button
-                className={`flex-1 z-10 flex relative ${fieldClassName} items-center space-x-3 focus:outline-none `}
-              >
-                {renderInput()}
+    return (
+        <>
+            <Popover className={`FlightDateRangeInput relative flex ${className}`}>
+                {({open}) => (
+                    <>
+                        <div
+                            className={`flex-1 z-10 flex items-center focus:outline-none ${
+                                open ? "nc-hero-field-focused" : ""
+                            }`}
+                        >
+                            <Popover.Button
+                                className={`flex-1 z-10 flex relative ${fieldClassName} items-center space-x-3 focus:outline-none `}
+                            >
+                                {renderInput()}
 
-                {startDate && open && (
-                  <ClearDataButton
-                    onClick={() => onChangeRangeDate([null, null])}
-                  />
+                                {startDate && open && (
+                                    <ClearDataButton
+                                        onClick={() => onChangeRangeDate([null, null])}
+                                    />
+                                )}
+                            </Popover.Button>
+
+                            {/* BUTTON SUBMIT OF FORM */}
+                            {hasButtonSubmit && (
+                                <div className="pr-2 xl:pr-4" onClick={handleFlightSearchClick}>
+                                    <ButtonSubmit href="#"/>
+                                </div>
+                            )}
+                        </div>
+
+                        {open && (
+                            <div
+                                className="h-8 absolute self-center top-1/2 -translate-y-1/2 z-0 -left-0.5 right-10 bg-white dark:bg-neutral-800"></div>
+                        )}
+
+                        <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-200"
+                            enterFrom="opacity-0 translate-y-1"
+                            enterTo="opacity-100 translate-y-0"
+                            leave="transition ease-in duration-150"
+                            leaveFrom="opacity-100 translate-y-0"
+                            leaveTo="opacity-0 translate-y-1"
+                        >
+                            <Popover.Panel
+                                className="absolute left-1/2 z-20 mt-3 top-full w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
+                                <div
+                                    className="overflow-hidden rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 bg-white dark:bg-neutral-800 p-8">
+                                    {selectsRange ? (
+                                        <DatePicker
+                                            selected={startDate}
+                                            onChange={onChangeRangeDate}
+                                            startDate={startDate}
+                                            endDate={endDate}
+                                            selectsRange
+                                            monthsShown={2}
+                                            showPopperArrow={false}
+                                            inline
+                                            renderCustomHeader={(p) => (
+                                                <DatePickerCustomHeaderTwoMonth {...p} />
+                                            )}
+                                            renderDayContents={(day, date) => (
+                                                <DatePickerCustomDay dayOfMonth={day} date={date}/>
+                                            )}
+                                        />
+                                    ) : (
+                                        <DatePicker
+                                            selected={startDate}
+                                            onChange={(date) => setStartDate(date)}
+                                            monthsShown={2}
+                                            showPopperArrow={false}
+                                            inline
+                                            renderCustomHeader={(p) => (
+                                                <DatePickerCustomHeaderTwoMonth {...p} />
+                                            )}
+                                            renderDayContents={(day, date) => (
+                                                <DatePickerCustomDay dayOfMonth={day} date={date}/>
+                                            )}
+                                        />
+                                    )}
+                                </div>
+                            </Popover.Panel>
+                        </Transition>
+                    </>
                 )}
-              </Popover.Button>
-
-              {/* BUTTON SUBMIT OF FORM */}
-              {hasButtonSubmit && (
-                <div className="pr-2 xl:pr-4" onClick={handleFlightSearchClick}>
-                  <ButtonSubmit
-                                href="#" />
-                </div>
-              )}
-            </div>
-
-            {open && (
-              <div className="h-8 absolute self-center top-1/2 -translate-y-1/2 z-0 -left-0.5 right-10 bg-white dark:bg-neutral-800"></div>
-            )}
-
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-200"
-              enterFrom="opacity-0 translate-y-1"
-              enterTo="opacity-100 translate-y-0"
-              leave="transition ease-in duration-150"
-              leaveFrom="opacity-100 translate-y-0"
-              leaveTo="opacity-0 translate-y-1"
-            >
-              <Popover.Panel className="absolute left-1/2 z-20 mt-3 top-full w-screen max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
-                <div className="overflow-hidden rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5 bg-white dark:bg-neutral-800 p-8">
-                  {selectsRange ? (
-                    <DatePicker
-                      selected={startDate}
-                      onChange={onChangeRangeDate}
-                      startDate={startDate}
-                      endDate={endDate}
-                      selectsRange
-                      monthsShown={2}
-                      showPopperArrow={false}
-                      inline
-                      renderCustomHeader={(p) => (
-                        <DatePickerCustomHeaderTwoMonth {...p} />
-                      )}
-                      renderDayContents={(day, date) => (
-                        <DatePickerCustomDay dayOfMonth={day} date={date} />
-                      )}
-                    />
-                  ) : (
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => setStartDate(date)}
-                      monthsShown={2}
-                      showPopperArrow={false}
-                      inline
-                      renderCustomHeader={(p) => (
-                        <DatePickerCustomHeaderTwoMonth {...p} />
-                      )}
-                      renderDayContents={(day, date) => (
-                        <DatePickerCustomDay dayOfMonth={day} date={date} />
-                      )}
-                    />
-                  )}
-                </div>
-              </Popover.Panel>
-            </Transition>
-          </>
-        )}
-      </Popover>
-    </>
-  );
+            </Popover>
+        </>
+    );
 };
 
 export default FlightDateRangeInput;
