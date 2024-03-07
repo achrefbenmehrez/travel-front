@@ -9,7 +9,7 @@ import useOutsideAlerter from "@/hooks/useOutsideAlerter";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import { useDebounce } from 'use-debounce';
 import {fetchCitiesFromApi} from "@/services/flightService"; // Import debounce
-
+import {Skeleton} from "@nextui-org/react";
 
 export interface FlightLocationInputProps {
     onInputDone?: (value: string) => void;
@@ -48,18 +48,23 @@ const FlightLocationInput: FC<FlightLocationInputProps> = ({
                 setLoading(true);
                 try {
                     const data = await fetchCitiesFromApi(debouncedValue);
-                    setSearchResults(data);
-
+                    setSearchResults(data.length > 0 ? data : getDefaultCity());
                 } catch (error) {
-                    console.error('Error fetching cities:', error);
+                    setSearchResults(getDefaultCity());
                 } finally {
                     setLoading(false);
                 }
             }
         };
 
+        const getDefaultCity = () => ([{
+            "name": "No data found",
+            "iata": "No data found"
+        }]);
+
         fetchCities();
-    }, [debouncedValue])
+    }, [debouncedValue]);
+
 
 
 
@@ -126,33 +131,53 @@ const FlightLocationInput: FC<FlightLocationInputProps> = ({
     const renderSearchValue = () => {
         return (
             <>
-                {searchResults.map((item:any) => (
-                    <span
-                        onClick={() => handleSelectLocation(item.iata)}
-                        key={item.name}
-                        className="flex px-4 sm:px-6 items-center space-x-3 py-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer"
-                    >
-            <span className="block text-neutral-400">
-              <MapPinIcon className="h-4 w-4 sm:h-6 sm:w-6" />
+                {loading ? ( // Display NexUI Skeleton while loading
+                    <div className="flex px-4 sm:px-6 items-center space-x-3 py-4">
+                        <Skeleton
+                            className="flex px-4 sm:px-6 items-center space-x-3 py-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer"
+                            style={{ borderRadius: '8px' }}  // Adjust the border-radius as needed
+                        />
+                        <Skeleton
+                            className="block text-neutral-400"
+                            style={{ borderRadius: '8px' }}  // Adjust the border-radius as needed
+                        />
+                        <Skeleton
+                            className="block text-neutral-700 dark:text-neutral-200"
+                            style={{ width: '100%', height: '2em', borderRadius: '8px' }}  // Adjust the border-radius as needed
+                        />
+                    </div>
+                ) : (
+                    searchResults.map((item: any) => (
+                        <span
+                            onClick={() => handleSelectLocation(item.iata)}
+                            key={item.name}
+                            className="flex px-4 sm:px-6 items-center space-x-3 py-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer"
+                        >
+              <span className="block text-neutral-400">
+                <MapPinIcon className="h-4 w-4 sm:h-6 sm:w-6" />
+              </span>
+              <span className="block text-neutral-700 dark:text-neutral-200">
+                {item.name}
+              </span>
             </span>
-            <span className="block text-neutral-700 dark:text-neutral-200">
-              {item.name}
-            </span>
-          </span>
-                ))}
+                    ))
+                )}
             </>
         );
     };
 
     return (
         <div className={`relative flex ${className}`} ref={containerRef}>
+
             <div
+
                 onChange={() => setShowPopover(true)}
                 className={`flex flex-1 relative z-10 [ nc-hero-field-padding--small ] flex-shrink-0 items-center space-x-3 cursor-pointer focus:outline-none text-left ${
                     showPopover ? "nc-hero-field-focused--2" : ""
                 }`}
             >
                 <div className="flex-1">
+
                     <input
                         className={`block w-full bg-transparent border-none focus:ring-0 p-0 focus:outline-none focus:placeholder-neutral-400 xl:text-base font-semibold placeholder-neutral-800 dark:placeholder-neutral-200 truncate`}
                         placeholder={placeHolder}
@@ -186,6 +211,7 @@ const FlightLocationInput: FC<FlightLocationInputProps> = ({
             )}
 
             {showPopover && (
+
                 <div className="absolute left-0 z-40 w-full min-w-[300px] sm:min-w-[400px] bg-white dark:bg-neutral-800 top-full mt-3 py-3 sm:py-5 rounded-3xl shadow-xl max-h-96 overflow-y-auto">
                     {value ? renderSearchValue() : renderRecentSearches()}
                 </div>
