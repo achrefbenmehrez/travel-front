@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useState } from "react";
+import React, {Fragment, useEffect, useState} from "react";
 import { Dialog, Popover, Tab, Transition } from "@headlessui/react";
 import ButtonPrimary from "@/shared/ButtonPrimary";
 import ButtonThird from "@/shared/ButtonThird";
@@ -46,8 +46,19 @@ const stopPoints = [
   },
 ];
 
+interface TabFiltersProps {
+  onFiltersChange: (filters: {
+    isOpenMoreFilter: boolean;
+    isOnSale: boolean;
+    rangePrices: number[];
+    tripTimes: number;
+    stopPontsStates: string[];
+    airlinesStates: string[];
+    // Add more filter values as needed
+  }) => void;
+}
 //
-const TabFilters = () => {
+const TabFilters: React.FC<TabFiltersProps> = ({ onFiltersChange }) => {
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
   //
   const [isOnSale, setIsOnSale] = useState(true);
@@ -55,6 +66,13 @@ const TabFilters = () => {
   const [tripTimes, setTripTimes] = useState(10);
   const [stopPontsStates, setStopPontsStates] = useState<string[]>([]);
   const [airlinesStates, setAirlinesStates] = useState<string[]>([]);
+
+  console.log("isOpenMoreFilter", isOpenMoreFilter);
+  console.log("isOnSale", isOnSale);
+  console.log("rangePrices", rangePrices);
+  console.log("tripTimes", tripTimes);
+  console.log("stopPontsStates", stopPontsStates);
+  console.log("airlinesStates", airlinesStates);
 
   //
   let [catTimes, setCatTimes] = useState({
@@ -67,6 +85,8 @@ const TabFilters = () => {
       Arrival: [0, 24],
     },
   });
+
+  console.log("catTimes", catTimes);
 
   //
   const closeModalMoreFilter = () => setisOpenMoreFilter(false);
@@ -94,6 +114,18 @@ const TabFilters = () => {
       </span>
     );
   };
+
+  useEffect(() => {
+    onFiltersChange({
+      isOpenMoreFilter,
+      isOnSale,
+      rangePrices,
+      tripTimes,
+      stopPontsStates,
+      airlinesStates,
+      // Add more filter values as needed
+    });
+  }, [isOpenMoreFilter, isOnSale, rangePrices, tripTimes, stopPontsStates, airlinesStates]);
 
   const renderTabsTimeFlightTab = () => {
     return (

@@ -13,6 +13,7 @@ export interface SectionGridFilterCardProps {
 }
 
 const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" }) => {
+    const [originalFlightData, setOriginalFlightData] = useState<FlightCardProps["data"][]>([]);
     const [flightData, setFlightData] = useState<FlightCardProps["data"][]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -31,9 +32,27 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
         return () => window.removeEventListener('flightDataFetched', handleFlightDataFetched);
     }, []);
 
+    const applyFilters = (filters: any) => {
+        console.log('filters', filters);
+
+        const filteredData = flightData.filter((flight) => {
+            const flightPrice = parseFloat(flight.price.replace('$', ''));
+            console.log('flightPrice', flightPrice);
+
+            return flightPrice >= parseFloat(filters.rangePrices[0]) && flightPrice <= parseFloat(filters.rangePrices[1]);
+        });
+
+        console.log('filteredData', filteredData);
+        setFlightData(filteredData);
+    };
+
     const indexOfLastFlight = currentPage * flightsPerPage;
     const indexOfFirstFlight = indexOfLastFlight - flightsPerPage;
     const currentFlights = flightData.slice(indexOfFirstFlight, indexOfLastFlight);
+
+
+
+
 
     return (
         <div className={`nc-SectionGridFilterCard ${className}`} data-nc-id="SectionGridFilterCard">
@@ -46,7 +65,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
                 }
             />
             <div className="mb-8 lg:mb-11">
-                <TabFilters />
+                <TabFilters onFiltersChange={(filters) => applyFilters(filters)} /* other props */ />
             </div>
             <div className="lg:p-10 lg:bg-neutral-50 lg:dark:bg-black/20 grid grid-cols-1 gap-6 rounded-3xl">
                 {isLoading ? (
