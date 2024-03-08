@@ -11,26 +11,6 @@ import Slider from "rc-slider";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 
 // DEMO DATA
-const typeOfAirlines = [
-  {
-    name: "Star Alliance",
-  },
-  {
-    name: "Air China",
-  },
-  {
-    name: "Air India",
-  },
-  {
-    name: "Air New Zealand",
-  },
-  {
-    name: "Asiana",
-  },
-  {
-    name: "Bangkok Airways",
-  },
-];
 const stopPoints = [
   {
     name: "Nonstop",
@@ -54,18 +34,18 @@ interface TabFiltersProps {
     tripTimes: number;
     stopPontsStates: string[];
     airlinesStates: string[];
-    // Add more filter values as needed
   }) => void;
+  typeOfAirlines: { name: string }[]; // Update the prop type
 }
 //
-const TabFilters: React.FC<TabFiltersProps> = ({ onFiltersChange }) => {
+const TabFilters: React.FC<TabFiltersProps> = ({ onFiltersChange, typeOfAirlines }) => {
   const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
   //
   const [isOnSale, setIsOnSale] = useState(true);
   const [rangePrices, setRangePrices] = useState([100, 5000]);
   const [tripTimes, setTripTimes] = useState(10);
   const [stopPontsStates, setStopPontsStates] = useState<string[]>([]);
-  const [airlinesStates, setAirlinesStates] = useState<string[]>([]);
+  const [airlinesStates, setAirlinesStates] = useState<string[]>(["All Airlines"]);
 
   console.log("isOpenMoreFilter", isOpenMoreFilter);
   console.log("isOnSale", isOnSale);
@@ -73,6 +53,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({ onFiltersChange }) => {
   console.log("tripTimes", tripTimes);
   console.log("stopPontsStates", stopPontsStates);
   console.log("airlinesStates", airlinesStates);
+  console.log("typeOfAirlines", typeOfAirlines);
 
   //
   let [catTimes, setCatTimes] = useState({
@@ -100,10 +81,27 @@ const TabFilters: React.FC<TabFiltersProps> = ({ onFiltersChange }) => {
   };
 
   const handleChangeAirlines = (checked: boolean, name: string) => {
-    checked
-      ? setAirlinesStates([...airlinesStates, name])
-      : setAirlinesStates(airlinesStates.filter((i) => i !== name));
+    if (name === "All Airlines") {
+      checked ? setAirlinesStates(["All Airlines"]) : setAirlinesStates([]);
+    } else {
+      if (checked) {
+        // If any individual airline is selected, unselect "All Airlines"
+        setAirlinesStates((prev) => [...prev.filter((i) => i !== "All Airlines"), name]);
+      } else {
+        setAirlinesStates((prev) => prev.filter((i) => i !== name));
+      }
+    }
   };
+
+
+
+
+
+
+
+
+
+
 
   //
 

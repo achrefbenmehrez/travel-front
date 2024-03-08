@@ -23,8 +23,13 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
 
     useEffect(() => {
         const handleFlightDataFetched = (event: any) => {
-            setFlightData(event.detail);
-            setIsLoading(false);
+            if (event && event.detail) {
+                setFlightData(event.detail);
+                setOriginalFlightData(event.detail);
+                setIsLoading(false);
+            } else {
+                console.error('Invalid flight data format');
+            }
         };
 
         window.addEventListener('flightDataFetched', handleFlightDataFetched);
@@ -34,25 +39,44 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
 
     const applyFilters = (filters: any) => {
         console.log('filters', filters);
+        console.log('originalFlightData', originalFlightData);
 
-        const filteredData = flightData.filter((flight) => {
+        const filteredData = originalFlightData.filter((flight) => {
             const flightPrice = parseFloat(flight.price.replace('$', ''));
-            console.log('flightPrice', flightPrice);
+            const airlineName = flight.airlines?.name;
 
-            return flightPrice >= parseFloat(filters.rangePrices[0]) && flightPrice <= parseFloat(filters.rangePrices[1]);
+            const isPriceInRange =
+                flightPrice >= parseFloat(filters.rangePrices[0]) &&
+                flightPrice <= parseFloat(filters.rangePrices[1]);
+
+            const isTypeOfAirlineMatch =
+                filters.airlinesStates.includes('All Airlines') ||
+                    filters.airlinesStates.length === 0 ||
+                filters.airlinesStates.includes(airlineName);
+
+            console.log('isTypeOfAirlineMatch', isTypeOfAirlineMatch);
+            console.log('isPriceInRange', isPriceInRange);
+
+            return isTypeOfAirlineMatch && isPriceInRange;
         });
 
         console.log('filteredData', filteredData);
         setFlightData(filteredData);
     };
 
+
+
+
+
+
+
+
+
     const indexOfLastFlight = currentPage * flightsPerPage;
     const indexOfFirstFlight = indexOfLastFlight - flightsPerPage;
     const currentFlights = flightData.slice(indexOfFirstFlight, indexOfLastFlight);
-
-
-
-
+    const typeOfAirlinesData = Array.from(new Set(originalFlightData.map((flight) => flight.airlines.name)))
+        .map(name => ({ name }));
 
     return (
         <div className={`nc-SectionGridFilterCard ${className}`} data-nc-id="SectionGridFilterCard">
@@ -65,7 +89,8 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
                 }
             />
             <div className="mb-8 lg:mb-11">
-                <TabFilters onFiltersChange={(filters) => applyFilters(filters)} /* other props */ />
+                <TabFilters onFiltersChange={(filters) => applyFilters(filters)} /* other props */
+                            typeOfAirlines={typeOfAirlinesData}/>
             </div>
             <div className="lg:p-10 lg:bg-neutral-50 lg:dark:bg-black/20 grid grid-cols-1 gap-6 rounded-3xl">
                 {isLoading ? (
