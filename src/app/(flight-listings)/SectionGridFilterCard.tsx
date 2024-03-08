@@ -94,6 +94,8 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
     const currentFlights = flightData.slice(indexOfFirstFlight, indexOfLastFlight);
     const typeOfAirlinesData = Array.from(new Set(originalFlightData.map((flight) => flight.airlines.name)))
         .map(name => ({ name }));
+    const origingAirportsData = Array.from(new Set(originalFlightData.map((flight) => flight.departureAirportOriginName)))
+        .map(name => ({ name }));
 
     return (
         <div className={`nc-SectionGridFilterCard ${className}`} data-nc-id="SectionGridFilterCard">
@@ -107,7 +109,7 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
             />
             <div className="mb-8 lg:mb-11">
                 <TabFilters onFiltersChange={(filters) => applyFilters(filters)} /* other props */
-                            typeOfAirlines={typeOfAirlinesData}/>
+                            typeOfAirlines={typeOfAirlinesData} originAirports={origingAirportsData}/>
             </div>
             <div className="lg:p-10 lg:bg-neutral-50 lg:dark:bg-black/20 grid grid-cols-1 gap-6 rounded-3xl">
                 {isLoading ? (

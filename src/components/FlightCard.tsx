@@ -40,7 +40,7 @@ export interface FlightCardProps {
 
 const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
     const [isOpen, setIsOpen] = useState(false);
-    const formatDepartureTime = (departingAt:any) => {
+    const formatDepartureTime = (departingAt: any) => {
         const departureTime = new Date(departingAt);
         const departureHour = ("0" + departureTime.getHours()).slice(-2);
         const departureMinutes = ("0" + departureTime.getMinutes()).slice(-2);
@@ -54,17 +54,17 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
     const minutes = Math.floor((durationInMilliseconds % (1000 * 60 * 60)) / (1000 * 60));
     const getFormattedDate = (dateString: string) => {
         const date = new Date(dateString);
-        const options:any = { weekday: 'long', month: 'long', day: 'numeric' };
+        const options: any = {weekday: 'long', month: 'long', day: 'numeric'};
         return date.toLocaleDateString('en-US', options);
     };
 
     const getTimeWithoutSeconds = (timeString: string) => {
         const time = new Date(timeString);
-        return time.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' });
+        return time.toLocaleTimeString('en-US', {hour: 'numeric', minute: 'numeric'});
     };
 
 
-    const renderDetailTop = (airlineLogo: any, origin: any, destination: any, airportOriginName: any, aiportDestinationName: any, aircraft: any, operatingIata: any, flightNumber: any,flightClass:any,departingAt:any,arrivingAt:any) => {
+    const renderDetailTop = (airlineLogo: any, origin: any, destination: any, airportOriginName: any, aiportDestinationName: any, aircraft: any, operatingIata: any, flightNumber: any, flightClass: any, departingAt: any, arrivingAt: any,status:any="false") => {
         const departingTime = new Date(departingAt).getTime();
         const arrivingTime = new Date(arrivingAt).getTime();
         const durationInMilliseconds = arrivingTime - departingTime;
@@ -72,13 +72,13 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
         const minutes = Math.floor((durationInMilliseconds % (1000 * 60 * 60)) / (1000 * 60));
         const getFormattedDate = (dateString: string) => {
             const date = new Date(dateString);
-            const options:any = { weekday: 'long', month: 'long', day: 'numeric' };
+            const options: any = {weekday: 'long', month: 'long', day: 'numeric'};
             return date.toLocaleDateString('en-US', options);
         };
 
         const getTimeWithoutSeconds = (timeString: string) => {
             const time = new Date(timeString);
-            return time.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' });
+            return time.toLocaleTimeString('en-US', {hour: 'numeric', minute: 'numeric'});
         };
         return (
             <div>
@@ -124,6 +124,16 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
                         <li>ANA · {flightClass} class · {aircraft} · {operatingIata} {flightNumber}</li>
                     </ul>
                 </div>
+                {status === "true" && (
+                    <div className="flex justify-end">
+                        <a
+                            className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-3 sm:px-6 ttnc-ButtonPrimary disabled:bg-opacity-70 bg-primary-6000 hover:bg-primary-700 text-neutral-50"
+                            href="/checkout"
+                        >
+                            Reserve
+                        </a>
+                    </div>
+                )}
             </div>
         );
     };
@@ -134,7 +144,7 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
             <div className="p-4 md:p-8 border border-neutral-200 dark:border-neutral-700 rounded-2xl ">
                 {renderDetailTop(data.airlines.logo, data.departureOrigin, data.departureDestination,
                     data.departureAirportOriginName, data.departureAirportDestinationName, data.departureAircraft,
-                    data.departureOperatingIataCode, data.departureOperatingCarrierFlightNumber,data.departureClass,data.departureDepartingAt,data.departureArrivingAt)}
+                    data.departureOperatingIataCode, data.departureOperatingCarrierFlightNumber, data.departureClass, data.departureDepartingAt, data.departureArrivingAt)}
                 <div className="my-7 md:my-10 space-y-5 md:pl-24">
                     <div className="border-t border-neutral-200 dark:border-neutral-700"/>
                     <div className="text-neutral-700 dark:text-neutral-300 text-sm md:text-base">
@@ -144,7 +154,7 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
                 </div>
                 {renderDetailTop(data.airlines.logo, data.returnOrigin, data.returnDestination,
                     data.returnAirportOriginName, data.returnAirportDestinationName, data.returnAircraft,
-                    data.returnOperatingIataCode, data.returnOperatingCarrierFlightNumber,data.returnClass,data.returnDepartingAt,data.returnArrivingAt)}
+                    data.returnOperatingIataCode, data.returnOperatingCarrierFlightNumber, data.returnClass, data.returnDepartingAt, data.returnArrivingAt,"true")}
             </div>
         );
     };
@@ -213,7 +223,8 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
 
                     {/* TIME - NAME */}
                     <div className="hidden lg:block  min-w-[150px] flex-[4] ">
-                        <div className="font-medium text-lg">{formatDepartureTime(data.departureArrivingAt)} - {formatDepartureTime(data.returnArrivingAt)}</div>
+                        <div
+                            className="font-medium text-lg">{formatDepartureTime(data.departureArrivingAt)} - {formatDepartureTime(data.returnArrivingAt)}</div>
                         <div className="text-sm text-neutral-500 font-normal mt-0.5">
                             {data.airlines.name}
                         </div>
@@ -253,6 +264,9 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
 
             {/* DETAIL */}
             {renderDetail()}
+
+
+
         </div>
     );
 };
