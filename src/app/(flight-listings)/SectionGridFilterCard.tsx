@@ -41,6 +41,14 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
         console.log('filters', filters);
         console.log('originalFlightData', originalFlightData);
 
+        const calculateFlightDurationInHours = (flight: any) => {
+            const departingTime = new Date(flight.departureDepartingAt).getTime();
+            const arrivingTime = new Date(flight.departureArrivingAt).getTime();
+            const durationInMilliseconds = arrivingTime - departingTime;
+            const hours = Math.floor(durationInMilliseconds / (1000 * 60 * 60));
+            return hours;
+        };
+
         const filteredData = originalFlightData.filter((flight) => {
             const flightPrice = parseFloat(flight.price.replace('$', ''));
             const airlineName = flight.airlines?.name;
@@ -51,18 +59,27 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({ className = "" 
 
             const isTypeOfAirlineMatch =
                 filters.airlinesStates.includes('All Airlines') ||
-                    filters.airlinesStates.length === 0 ||
+                filters.airlinesStates.length === 0 ||
                 filters.airlinesStates.includes(airlineName);
+
+            const flightDurationInHours = calculateFlightDurationInHours(flight);
+            console.log('flightDurationInHours', flightDurationInHours);
+
+            const isTripTimeLessThanFilter =
+                flightDurationInHours <= filters.tripTimes;
 
             console.log('isTypeOfAirlineMatch', isTypeOfAirlineMatch);
             console.log('isPriceInRange', isPriceInRange);
+            console.log('isTripTimeLessThanFilter', isTripTimeLessThanFilter);
 
-            return isTypeOfAirlineMatch && isPriceInRange;
+            return isTypeOfAirlineMatch && isPriceInRange && isTripTimeLessThanFilter;
         });
 
         console.log('filteredData', filteredData);
         setFlightData(filteredData);
     };
+
+
 
 
 
