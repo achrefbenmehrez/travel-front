@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, {FC, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {de} from "date-fns/locale";
 
 export interface FlightCardProps {
@@ -36,11 +36,14 @@ export interface FlightCardProps {
 
 
     };
+    index: number;
 }
 
-const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
+const FlightCard: FC<FlightCardProps> = ({ className = "", data, index }) => {
     const [isOpen, setIsOpen] = useState(false);
     const buttonDisplayStatus:Boolean =true
+    console.log('index',index)
+
 
     const formatDepartureTime = (departingAt: any) => {
         const departureTime = new Date(departingAt);
@@ -65,6 +68,11 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
         return time.toLocaleTimeString('en-US', {hour: 'numeric', minute: 'numeric'});
     };
 
+    useEffect(() => {
+        if (index === 0){
+            setIsOpen(true); // Open the first card after mounting
+        }
+    }, []);
 
     const renderDetailTop = (airlineLogo: any, origin: any, destination: any, airportOriginName: any, aiportDestinationName: any, aircraft: any, operatingIata: any, flightNumber: any, flightClass: any, departingAt: any, arrivingAt: any,status:any=false) => {
         const departingTime = new Date(departingAt).getTime();

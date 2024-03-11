@@ -104,39 +104,37 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({className = ""})
     console.log('Destination Countries:', destinationCountry);
 
 
-    return (
+    return !isLoading && (
         <div className={`nc-SectionGridFilterCard ${className}`} data-nc-id="SectionGridFilterCard">
             <Heading2
                 heading={originCountry + " - " + destinationCountry}
                 subHeading={
                     <span className="block text-neutral-500 dark:text-neutral-400 mt-3">
-            {totalFlights} flights<span className="mx-2">·</span>round trip<span className="mx-2">·</span>2 Guests
-          </span>
+                    {totalFlights} flights<span className="mx-2">·</span>round trip<span className="mx-2">·</span>2 Guests
+                </span>
                 }
             />
             <div className="mb-8 lg:mb-11">
-                <TabFilters onFiltersChange={(filters) => applyFilters(filters)} /* other props */
-                            typeOfAirlines={typeOfAirlinesData} originAirports={origingAirportsData}
-                            destinationAirports={destinationAirportsData}/>
+                <TabFilters
+                    onFiltersChange={(filters) => applyFilters(filters)} /* other props */
+                    typeOfAirlines={typeOfAirlinesData}
+                    originAirports={origingAirportsData}
+                    destinationAirports={destinationAirportsData}
+                />
             </div>
             <div className="lg:p-10 lg:bg-neutral-50 lg:dark:bg-black/20 grid grid-cols-1 gap-6 rounded-3xl">
-                {isLoading ? (
-                    <CustomSpinner/> // Display spinner only when loading
-                ) : (
-                    <>
-                        {currentFlights.map((item, index) => (
-                            <FlightCard key={index} data={item}/>
-                        ))}
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={Math.ceil(flightData.length / flightsPerPage)}
-                            onPageChange={(page) => setCurrentPage(page)}
-                        />
-                    </>
-                )}
+                {currentFlights.map((item, index) => (
+                    <FlightCard key={index} data={item} index={index} />
+                ))}
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(flightData.length / flightsPerPage)}
+                    onPageChange={(page) => setCurrentPage(page)}
+                />
             </div>
         </div>
     );
-};
+}
 
 export default SectionGridFilterCard;
