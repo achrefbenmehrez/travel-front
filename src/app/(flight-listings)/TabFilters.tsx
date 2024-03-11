@@ -34,14 +34,16 @@ interface TabFiltersProps {
         tripTimes: number;
         stopPontsStates: string[];
         airlinesStates: string[];
-        airportsStates: string[];
+        originAirportsStates: string[]
+        destinationAirportsStates: string[]
     }) => void;
     typeOfAirlines: { name: string }[]; // Update the prop type
     originAirports: { name: string }[]; // Update the prop type
+    destinationAirports: { name: string }[]; // Update the prop type
 }
 
 //
-const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,originAirports}) => {
+const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,originAirports,destinationAirports}) => {
     const [isOpenMoreFilter, setisOpenMoreFilter] = useState(false);
     //
     const [isOnSale, setIsOnSale] = useState(true);
@@ -49,7 +51,8 @@ const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,
     const [tripTimes, setTripTimes] = useState(10);
     const [stopPontsStates, setStopPontsStates] = useState<string[]>([]);
     const [airlinesStates, setAirlinesStates] = useState<string[]>(["All Airlines"]);
-    const [airportsStates, setAirportsStates] = useState<string[]>(["All Airports"]);
+    const [originAirportsStates, setoriginAirportsStates] = useState<string[]>(["All Airports"]);
+    const [destinationAirportsStates,setDestinationAirportsStates] = useState<string[]>(["All Airports"]);
 
     console.log("isOpenMoreFilter", isOpenMoreFilter);
     console.log("isOnSale", isOnSale);
@@ -97,10 +100,16 @@ const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,
             }
         }
     };
-    const handleChangeAirports = (checked: boolean, name: string) => {
+    const handleChangeOringAirports = (checked: boolean, name: string) => {
         checked
-            ? setAirportsStates([...airportsStates, name])
-            : setAirportsStates(airportsStates.filter((i) => i !== name));
+            ? setoriginAirportsStates([...originAirportsStates, name])
+            : setoriginAirportsStates(originAirportsStates.filter((i) => i !== name));
+    };
+
+    const handleChangeDestinationAirports = (checked: boolean, name: string) => {
+        checked
+            ? setDestinationAirportsStates([...destinationAirportsStates, name])
+            : setDestinationAirportsStates(destinationAirportsStates.filter((i) => i !== name));
     };
 
 
@@ -123,10 +132,11 @@ const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,
             tripTimes,
             stopPontsStates,
             airlinesStates,
-            airportsStates
+            originAirportsStates,
+            destinationAirportsStates,
             // Add more filter values as needed
         });
-    }, [isOpenMoreFilter, isOnSale, rangePrices, tripTimes, stopPontsStates, airlinesStates, airportsStates]);
+    }, [isOpenMoreFilter, isOnSale, rangePrices, tripTimes, stopPontsStates, airlinesStates, originAirportsStates,destinationAirportsStates]);
 
     const renderTabsTimeFlightTab = () => {
         return (
@@ -338,17 +348,17 @@ const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,
                             className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border border-neutral-300 dark:border-neutral-700 focus:outline-none
                ${open ? "!border-primary-500 " : ""}
                 ${
-                                !!airportsStates.length
+                                !!originAirportsStates.length
                                     ? "!border-primary-500 bg-primary-50"
                                     : ""
                             }
                 `}
                         >
                             <span>Origin Airports</span>
-                            {!airportsStates.length ? (
+                            {!originAirportsStates.length ? (
                                 <i className="las la-angle-down ml-2"></i>
                             ) : (
-                                <span onClick={() => setAirportsStates([])}>
+                                <span onClick={() => setoriginAirportsStates([])}>
                   {renderXClear()}
                 </span>
                             )}
@@ -370,9 +380,9 @@ const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,
                                         <Checkbox
                                             name="All Airports"
                                             label="All Airports"
-                                            defaultChecked={airportsStates.includes("All Airports")}
+                                            defaultChecked={originAirportsStates.includes("All Airports")}
                                             onChange={(checked) =>
-                                                handleChangeAirports(checked, "All Airports")
+                                                handleChangeOringAirports(checked, "All Airports")
                                             }
                                         />
                                         <hr/>
@@ -381,9 +391,9 @@ const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,
                                                 <Checkbox
                                                     name={item.name}
                                                     label={item.name}
-                                                    defaultChecked={airportsStates.includes(item.name)}
+                                                    defaultChecked={originAirportsStates.includes(item.name)}
                                                     onChange={(checked) =>
-                                                        handleChangeAirports(checked, item.name)
+                                                        handleChangeOringAirports(checked, item.name)
                                                     }
                                                 />
                                             </div>
@@ -394,7 +404,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,
                                         <ButtonThird
                                             onClick={() => {
                                                 close();
-                                                setAirportsStates([]);
+                                                setoriginAirportsStates([]);
                                             }}
                                             sizeClass="px-4 py-2 sm:px-5"
                                         >
@@ -423,17 +433,17 @@ const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,
                             className={`flex items-center justify-center px-4 py-2 text-sm rounded-full border border-neutral-300 dark:border-neutral-700 focus:outline-none
                ${open ? "!border-primary-500 " : ""}
                 ${
-                                !!airportsStates.length
+                                !!destinationAirportsStates.length
                                     ? "!border-primary-500 bg-primary-50"
                                     : ""
                             }
                 `}
                         >
                             <span>Destination Airports</span>
-                            {!airportsStates.length ? (
+                            {!destinationAirportsStates.length ? (
                                 <i className="las la-angle-down ml-2"></i>
                             ) : (
-                                <span onClick={() => setAirportsStates([])}>
+                                <span onClick={() => setDestinationAirportsStates([])}>
                   {renderXClear()}
                 </span>
                             )}
@@ -455,20 +465,20 @@ const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,
                                         <Checkbox
                                             name="All Airports"
                                             label="All Airports"
-                                            defaultChecked={airportsStates.includes("All Airports")}
+                                            defaultChecked={destinationAirportsStates.includes("All Airports")}
                                             onChange={(checked) =>
-                                                handleChangeAirports(checked, "All Airports")
+                                                handleChangeDestinationAirports(checked, "All Airports")
                                             }
                                         />
                                         <hr/>
-                                        {originAirports.map((item) => (
+                                        {destinationAirports.map((item) => (
                                             <div key={item.name} className="">
                                                 <Checkbox
                                                     name={item.name}
                                                     label={item.name}
-                                                    defaultChecked={airportsStates.includes(item.name)}
+                                                    defaultChecked={destinationAirportsStates.includes(item.name)}
                                                     onChange={(checked) =>
-                                                        handleChangeAirports(checked, item.name)
+                                                        handleChangeDestinationAirports(checked, item.name)
                                                     }
                                                 />
                                             </div>
@@ -479,7 +489,7 @@ const TabFilters: React.FC<TabFiltersProps> = ({onFiltersChange, typeOfAirlines,
                                         <ButtonThird
                                             onClick={() => {
                                                 close();
-                                                setAirportsStates([]);
+                                                setDestinationAirportsStates([]);
                                             }}
                                             sizeClass="px-4 py-2 sm:px-5"
                                         >

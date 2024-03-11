@@ -95,6 +95,26 @@ const FlightLocationInput: FC<FlightLocationInputProps> = ({
 
     };
 
+    const [selectedLocation, setSelectedLocation] = useState<any>(null);
+    const handleSelectedLocationFromDropdown = (item: any) => {
+        // Save the selected object
+        setSelectedLocation(item.iata);
+
+        // Display only the name
+        setValue(item.name);
+
+        // Callback to parent component if needed
+        onInputDone && onInputDone(item.name);
+
+        // Close the popover
+        setShowPopover(false);
+
+        // Additional callback for the selected object, if needed
+        onChange && onChange(item);
+    }
+    console.log('selectedLocation', selectedLocation);
+
+
 
 
     const renderRecentSearches = () => {
@@ -149,8 +169,8 @@ const FlightLocationInput: FC<FlightLocationInputProps> = ({
                 ) : (
                     searchResults.map((item: any) => (
                         <span
-                            onClick={() => handleSelectLocation(item.iata)}
-                            key={item.name}
+                            onClick={() => handleSelectedLocationFromDropdown(item)}
+                            key={item.iata}
                             className="flex px-4 sm:px-6 items-center space-x-3 py-4 hover:bg-neutral-100 dark:hover:bg-neutral-700 cursor-pointer"
                         >
               <span className="block text-neutral-400">

@@ -6,8 +6,8 @@ export const fetchFlightData = async (startDate: any, endDate: any, defaultAirpo
     // print all data in params
     console.log('startDate', startDate);
     console.log('endDate', endDate);
-    console.log('defaultAirport', defaultAirport);
-    console.log('defaultDestinationAiport', defaultDestinationAiport);
+    console.log('defaultAirport', defaultAirport.iata);
+    console.log('defaultDestinationAiport', defaultDestinationAiport.iata);
     console.log('flightClassFilter', flightClassFilter);
     console.log('dropOffLocationTypeFilter', dropOffLocationTypeFilter);
 
@@ -22,10 +22,10 @@ export const fetchFlightData = async (startDate: any, endDate: any, defaultAirpo
             body: JSON.stringify({
                 startDate: startDate,
                 endDate: endDate,
-                departureOrigin: defaultAirport,
-                departureDestination: defaultDestinationAiport,
-                returnOrigin: defaultDestinationAiport,
-                returnDestination: defaultAirport,
+                departureOrigin: defaultAirport.iata,
+                departureDestination: defaultDestinationAiport.iata,
+                returnOrigin: defaultDestinationAiport.iata,
+                returnDestination: defaultAirport.iata,
                 cabinClass: flightClassFilter,
                 passengerType: "adult",
             }),

@@ -20,7 +20,7 @@ const ListingFlightsPage: FC<ListingFlightsPageProps> = ({}) => {
           listingType={
             <>
               <i className="text-2xl las la-plane-departure"></i>
-              <span className="ml-2.5">1599 flights</span>
+              <span className="ml-2.5">Unlimited flights</span>
             </>
           }
           className="pt-10 pb-24 lg:pb-28 lg:pt-16 "

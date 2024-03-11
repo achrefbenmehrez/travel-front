@@ -40,6 +40,8 @@ export interface FlightCardProps {
 
 const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
     const [isOpen, setIsOpen] = useState(false);
+    const buttonDisplayStatus:Boolean =true
+
     const formatDepartureTime = (departingAt: any) => {
         const departureTime = new Date(departingAt);
         const departureHour = ("0" + departureTime.getHours()).slice(-2);
@@ -64,7 +66,7 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
     };
 
 
-    const renderDetailTop = (airlineLogo: any, origin: any, destination: any, airportOriginName: any, aiportDestinationName: any, aircraft: any, operatingIata: any, flightNumber: any, flightClass: any, departingAt: any, arrivingAt: any,status:any="false") => {
+    const renderDetailTop = (airlineLogo: any, origin: any, destination: any, airportOriginName: any, aiportDestinationName: any, aircraft: any, operatingIata: any, flightNumber: any, flightClass: any, departingAt: any, arrivingAt: any,status:any=false) => {
         const departingTime = new Date(departingAt).getTime();
         const arrivingTime = new Date(arrivingAt).getTime();
         const durationInMilliseconds = arrivingTime - departingTime;
@@ -124,7 +126,7 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
                         <li>ANA · {flightClass} class · {aircraft} · {operatingIata} {flightNumber}</li>
                     </ul>
                 </div>
-                {status === "true" && (
+                {status === true && (
                     <div className="flex justify-end">
                         <a
                             className="nc-Button relative h-auto inline-flex items-center justify-center rounded-full transition-colors text-sm sm:text-base font-medium px-4 py-3 sm:px-6 ttnc-ButtonPrimary disabled:bg-opacity-70 bg-primary-6000 hover:bg-primary-700 text-neutral-50"
@@ -154,7 +156,7 @@ const FlightCard: FC<FlightCardProps> = ({className = "", data}) => {
                 </div>
                 {renderDetailTop(data.airlines.logo, data.returnOrigin, data.returnDestination,
                     data.returnAirportOriginName, data.returnAirportDestinationName, data.returnAircraft,
-                    data.returnOperatingIataCode, data.returnOperatingCarrierFlightNumber, data.returnClass, data.returnDepartingAt, data.returnArrivingAt,"true")}
+                    data.returnOperatingIataCode, data.returnOperatingCarrierFlightNumber, data.returnClass, data.returnDepartingAt, data.returnArrivingAt,buttonDisplayStatus)}
             </div>
         );
     };
