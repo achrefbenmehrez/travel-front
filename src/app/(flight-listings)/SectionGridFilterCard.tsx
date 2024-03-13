@@ -104,7 +104,9 @@ const SectionGridFilterCard: FC<SectionGridFilterCardProps> = ({className = ""})
     console.log('Destination Countries:', destinationCountry);
 
 
+    // return !isLoading && (
     return !isLoading && (
+
         <div className={`nc-SectionGridFilterCard ${className}`} data-nc-id="SectionGridFilterCard">
             <Heading2
                 heading={originCountry + " - " + destinationCountry}

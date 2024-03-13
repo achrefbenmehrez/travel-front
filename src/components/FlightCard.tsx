@@ -39,11 +39,10 @@ export interface FlightCardProps {
     index: number;
 }
 
-const FlightCard: FC<FlightCardProps> = ({ className = "", data, index }) => {
+const FlightCard: FC<FlightCardProps> = ({className = "", data, index}) => {
     const [isOpen, setIsOpen] = useState(false);
-    const buttonDisplayStatus:Boolean =true
-    console.log('index',index)
-
+    const buttonDisplayStatus: Boolean = true
+    console.log('index', index)
 
     const formatDepartureTime = (departingAt: any) => {
         const departureTime = new Date(departingAt);
@@ -69,12 +68,12 @@ const FlightCard: FC<FlightCardProps> = ({ className = "", data, index }) => {
     };
 
     useEffect(() => {
-        if (index === 0){
+        if (index === 0) {
             setIsOpen(true); // Open the first card after mounting
         }
     }, []);
 
-    const renderDetailTop = (airlineLogo: any, origin: any, destination: any, airportOriginName: any, aiportDestinationName: any, aircraft: any, operatingIata: any, flightNumber: any, flightClass: any, departingAt: any, arrivingAt: any,status:any=false) => {
+    const renderDetailTop = (airlineLogo: any, origin: any, destination: any, airportOriginName: any, aiportDestinationName: any, aircraft: any, operatingIata: any, flightNumber: any, flightClass: any, departingAt: any, arrivingAt: any, status: any = false) => {
         const departingTime = new Date(departingAt).getTime();
         const arrivingTime = new Date(arrivingAt).getTime();
         const durationInMilliseconds = arrivingTime - departingTime;
@@ -125,6 +124,7 @@ const FlightCard: FC<FlightCardProps> = ({ className = "", data, index }) => {
                                 <span className=" font-semibold">
                   {aiportDestinationName} ({destination})
                 </span>
+
                             </div>
                         </div>
                     </div>
@@ -164,7 +164,7 @@ const FlightCard: FC<FlightCardProps> = ({ className = "", data, index }) => {
                 </div>
                 {renderDetailTop(data.airlines.logo, data.returnOrigin, data.returnDestination,
                     data.returnAirportOriginName, data.returnAirportDestinationName, data.returnAircraft,
-                    data.returnOperatingIataCode, data.returnOperatingCarrierFlightNumber, data.returnClass, data.returnDepartingAt, data.returnArrivingAt,buttonDisplayStatus)}
+                    data.returnOperatingIataCode, data.returnOperatingCarrierFlightNumber, data.returnClass, data.returnDepartingAt, data.returnArrivingAt, buttonDisplayStatus)}
             </div>
         );
     };
@@ -274,7 +274,6 @@ const FlightCard: FC<FlightCardProps> = ({ className = "", data, index }) => {
 
             {/* DETAIL */}
             {renderDetail()}
-
 
 
         </div>
